@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Stock Akun Aplikasi Premium</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+  }
+  .container {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2.5rem 3rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    width: 360px;
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    font-size: 1.8rem;
+  }
+  label {
+    display: block;
+    text-align: left;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+  input[type="text"] {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+  button {
+    background: #fff;
+    color: #2575fc;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 0.65rem 1.25rem;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    width: 100%;
+  }
+  button:hover {
+    background: #e1e1e1;
+  }
+  .account-info {
+    margin-top: 1.5rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 1rem;
+    font-size: 1rem;
+    user-select: all;
+  }
+  .copy-feedback {
+    margin-top: 0.75rem;
+    color: #b3ffb3;
+    font-weight: 600;
+  }
+  .error-message {
+    color: #ff6666;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stock Akun Premium</h1>
+    <label for="code-input">Masukkan Kode:</label>
+    <input type="text" id="code-input" placeholder="Masukkan kode kamu di sini..." autocomplete="off" />
+    <button id="show-account-btn">Tampilkan Akun</button>
+    <div id="error-message" class="error-message" style="display:none;"></div>
+    <div id="account-container" style="display:none;">
+      <div class="account-info" id="account-info"></div>
+      <button id="copy-btn">Salin Email & Password</button>
+      <div id="copy-feedback" class="copy-feedback" style="display:none;">Berhasil disalin ke clipboard!</div>
+    </div>
+  </div>
+
+<script>
+  (function() {
+    // Predefined stock code to data map
+    const stockAccounts = {
+      'PREMIUM123': { email: 'premiumuser1@example.com', password: 'pass1234' },
+      'VIP456': { email: 'vipaccount@example.com', password: 'vipsecure456' },
+      'ELITE789': { email: 'eliteuser@example.com', password: 'elitepass789' },
+      'SPECIAL321': { email: 'specialuser@example.com', password: 'special321pass' }
+    };
+
+    const codeInput = document.getElementById('code-input');
+    const showAccountBtn = document.getElementById('show-account-btn');
+    const accountContainer = document.getElementById('account-container');
+    const accountInfo = document.getElementById('account-info');
+    const copyBtn = document.getElementById('copy-btn');
+    const copyFeedback = document.getElementById('copy-feedback');
+    const errorMessage = document.getElementById('error-message');
+
+    function resetDisplay() {
+      accountContainer.style.display = 'none';
+      copyFeedback.style.display = 'none';
+      errorMessage.style.display = 'none';
+      accountInfo.textContent = '';
+    }
+
+    showAccountBtn.addEventListener('click', () => {
+      const code = codeInput.value.trim().toUpperCase();
+      resetDisplay();
+      if(!code) {
+        errorMessage.textContent = 'Kode tidak boleh kosong.';
+        errorMessage.style.display = 'block';
+        return;
+      }
+      if(stockAccounts.hasOwnProperty(code)) {
+        const account = stockAccounts[code];
+        accountInfo.textContent = `Email: ${account.email}\nPassword: ${account.password}`;
+        accountContainer.style.display = 'block';
+      } else {
+        errorMessage.textContent = 'Kode tidak ditemukan. Silakan coba lagi.';
+        errorMessage.style.display = 'block';
+      }
+    });
+
+    copyBtn.addEventListener('click', () => {
+      const textToCopy = accountInfo.textContent;
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        copyFeedback.style.display = 'block';
+        setTimeout(() => {
+          copyFeedback.style.display = 'none';
+        }, 3000);
+      }, () => {
+        alert('Gagal menyalin ke clipboard. Silakan salin manual.');
+      });
+    });
+
+    // Optional: trigger show on Enter key press
+    codeInput.addEventListener('keyup', (e) => {
+      if(e.key === 'Enter') {
+        showAccountBtn.click();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
+
